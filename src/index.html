@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,user-scalable=no,minimal-ui" />
+    <title>National Games 23</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="module" src="index.ts"></script>
+</head>
+
+<body>
+    <div class="overlay">
+      <div id="tap-to-place" class="centered-text">
+        <img src="../assets/tap.png" alt="tap to place">
+      </div>
+    </div>
+    <div class="container">
+        <div class="text-container">
+            <div class="left-text selected-text">
+                Image
+            </div>
+            <div class="right-text">
+                Video
+            </div>
+        </div>
+        <div id="image" class="btn"></div>
+        <div id="video" class="btn"></div>
+    </div>
+</body>
+
+<script>
+    const leftText = document.querySelector(".left-text");
+    const rightText = document.querySelector(".right-text");
+    const photoButton = document.getElementById("image");
+    const videoButton = document.getElementById("video");
+    let isRecording = false;
+
+    photoButton.style.display = "block";
+
+    leftText.addEventListener("click", () => {
+        photoButton.style.display = "block";
+        videoButton.style.display = "none";
+        leftText.classList.add("selected-text");
+        rightText.classList.remove("selected-text");
+    });
+
+    rightText.addEventListener("click", () => {
+        videoButton.style.display = "block";
+        photoButton.style.display = "none";
+        rightText.classList.add("selected-text");
+        leftText.classList.remove("selected-text");
+    });
+
+    videoButton.addEventListener("click", () => {
+        if(!isRecording) {
+            isRecording = true;
+            videoButton.classList.add("recording-on");
+        } else {
+            isRecording = false;
+            videoButton.classList.remove("recording-on");
+        }
+    });
+</script>
+
+</html>
