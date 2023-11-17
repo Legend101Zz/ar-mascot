@@ -209,7 +209,7 @@ const placeButton =
 function saveImage(dataURL: any) {
   //const snapshotCanvas = renderer.domElement;
   //const dataURL = snapshotCanvas.toDataURL("image/png");
-
+  console.log("Data URL:", dataURL);
   const link = document.createElement("a");
   link.href = dataURL;
   link.download = "snapshot.png";
@@ -217,24 +217,49 @@ function saveImage(dataURL: any) {
   link.click();
   document.body.removeChild(link);
 }
-
-// Function to share the image using the Web Share API
 function shareImage(dataURL: any) {
-  //const snapshotCanvas = renderer.domElement;
-  //const dataURL = snapshotCanvas.toDataURL("image/png");
+  const imageData = dataURL.split(",")[1]; // Extract the base64-encoded image data
+  const binaryImageData = atob(imageData); // Decode base64 to binary
+  const uint8Array = new Uint8Array(binaryImageData.length);
+
+  for (let i = 0; i < binaryImageData.length; i++) {
+    uint8Array[i] = binaryImageData.charCodeAt(i);
+  }
+
+  const blob = new Blob([uint8Array], { type: "image/png" });
+  const file = new File([blob], "shared-image.png", { type: "image/png" });
 
   if (navigator.share) {
     navigator
       .share({
         title: "Shared Image",
         text: "Check out this image!",
-        files: [new File([dataURL], "shared-image.png", { type: "image/png" })],
+        files: [file],
       })
       .then(() => console.log("Shared successfully"))
       .catch((error) => console.error("Error sharing:", error));
   } else {
     console.warn("Web Share API not supported");
   }
+}
+
+// Function to capture the current content of the canvas and share it
+function captureAndShare() {
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+
+  // Set the canvas dimensions to match the renderer's size
+  canvas.width = renderer.domElement.width;
+  canvas.height = renderer.domElement.height;
+
+  // Draw the current content of the renderer onto the canvas
+  context.drawImage(renderer.domElement, 0, 0);
+
+  // Get the data URL of the canvas
+  const dataURL = canvas.toDataURL("image/png");
+
+  // Call the shareImage function with the captured dataURL
+  shareImage(dataURL);
 }
 
 // Function to display the overlay with captured image
