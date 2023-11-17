@@ -206,9 +206,9 @@ const placeButton =
 // sharing functionality
 
 // Function to save the image
-function saveImage() {
-  const snapshotCanvas = renderer.domElement;
-  const dataURL = snapshotCanvas.toDataURL("image/png");
+function saveImage(dataURL: any) {
+  //const snapshotCanvas = renderer.domElement;
+  //const dataURL = snapshotCanvas.toDataURL("image/png");
 
   const link = document.createElement("a");
   link.href = dataURL;
@@ -219,9 +219,9 @@ function saveImage() {
 }
 
 // Function to share the image using the Web Share API
-function shareImage() {
-  const snapshotCanvas = renderer.domElement;
-  const dataURL = snapshotCanvas.toDataURL("image/png");
+function shareImage(dataURL: any) {
+  //const snapshotCanvas = renderer.domElement;
+  //const dataURL = snapshotCanvas.toDataURL("image/png");
 
   if (navigator.share) {
     navigator
@@ -258,18 +258,20 @@ function showOverlay(dataURL: any) {
   overlay.appendChild(image);
 
   const buttonsContainer = document.createElement("div");
-  buttonsContainer.style.width = "100%";
+  buttonsContainer.style.width = "80%"; // Adjust the width of the buttons container
   buttonsContainer.style.display = "flex";
-  buttonsContainer.style.justifyContent = "space-around";
+  buttonsContainer.style.flexDirection = "column"; // Stack buttons vertically
+  buttonsContainer.style.alignItems = "center";
   buttonsContainer.style.padding = "20px";
 
   const saveButton = document.createElement("button");
   saveButton.textContent = "Save";
+  saveButton.style.width = "80%"; // Make the button wider
   saveButton.style.padding = "15px 20px";
   saveButton.style.borderRadius = "10px";
   saveButton.style.background = "linear-gradient(to right, #ff8c00, #ff2d55)";
   saveButton.style.color = "white";
-  saveButton.style.marginRight = "10px";
+  saveButton.style.marginBottom = "10px"; // Add some spacing between buttons
   saveButton.addEventListener("click", () => {
     saveImage(dataURL);
     closeOverlay();
@@ -278,13 +280,14 @@ function showOverlay(dataURL: any) {
 
   const shareButton = document.createElement("button");
   shareButton.textContent = "Share";
+  shareButton.style.width = "80%"; // Make the button wider
   shareButton.style.padding = "15px 20px";
   shareButton.style.borderRadius = "10px";
   shareButton.style.background = "linear-gradient(to right, #36d1dc, #5b86e5)";
   shareButton.style.color = "white";
   shareButton.addEventListener("click", () => {
     console.log("Share button clicked");
-    shareImage();
+    shareImage(dataURL);
     closeOverlay();
   });
   buttonsContainer.appendChild(shareButton);
